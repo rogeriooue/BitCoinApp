@@ -4,10 +4,10 @@ import { View, Text } from "react-native";
 import styles from "./styles";
 
 
-export default function CurrentPrice() {
+export default function CurrentPrice(props) {
     return (
         <View style={styles.headerPrice}>
-            <Text style={styles.CurrentPrice}>$ 0.00</Text>
+            <Text style={styles.CurrentPrice}>$ {props.lastQuotation}</Text>
             <Text style={styles.textPrice}>last quote</Text>
         </View>
     );

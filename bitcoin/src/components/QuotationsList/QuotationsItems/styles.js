@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },  
     contextLeft: {
-        width: "36%",
+        width: "35%",
         alignItems: "flex-start",
     },
     boxLogo: {
