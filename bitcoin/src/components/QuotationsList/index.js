@@ -46,12 +46,12 @@ export default function QuotationsList(props) {
                     <Text style={styles.textButtonQuery}>6M</Text>
                 </TouchableOpacity>
             </View>
-                <FlatList
-                    data={props.listTransactions}
-                    renderItem={({ item }) => {
-                        return <QuotationsItems valor={item.valor} data={item.data} />
-                    }}
-                />
+            <FlatList
+                data={props.listTransactions}
+                renderItem={({ item }) => {
+                    return <QuotationsItems valor={item.valor} data={item.data} />
+                }}
+            />
         </Fragment>
     );
 }
