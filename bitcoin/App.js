@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, StatusBar, SafeAreaView, Platform } from 'react-native';
 
 import CurrentPrice from './src/components/CurrentPrice';
@@ -20,72 +20,80 @@ function url(days) {
   date.setDate(date.getDate() - listLastDays);
   const startDate = `${date.getFullYear()}-${addZero(date.getMonth() + 1)}-${addZero(date.getDate())}`;
 
-  console.log(`https://api.coindesk.com/v1/bpi/historical/close.json?start=${startDate}&end=${endDate}`);
+  // console.log(`https://api.coindesk.com/v1/bpi/historical/close.json?start=${startDate}&end=${endDate}`);
 
   return `https://api.coindesk.com/v1/bpi/historical/close.json?start=${startDate}&end=${endDate}`;
 }
 
 async function getListCoins(url) {
-  let response = await fetch(url);
-  let returnApi = await response.json();
-  let selectListQuotations = returnApi.bpi;
-  const queryCoinsList = Object.keys(selectListQuotations).map((key) => {
-    return {
-      data: key.split("-").reverse().join("/"),
-      valor: selectListQuotations[key]
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-  });
-  let data = queryCoinsList.reverse();
-  console.log("data: ", data);
-  return data;
+    let returnApi = await response.json();
+    let selectListQuotations = returnApi.bpi;
+    const queryCoinsList = Object.keys(selectListQuotations).map((key) => {
+      return {
+        data: key.split("-").reverse().join("/"),
+        valor: selectListQuotations[key]
+      }
+    });
+    let data = queryCoinsList.reverse();
+    return data;
+  } catch (error) {
+    console.error("Error getListCoins: ", error);
+    throw error;
+  }
 }
 
 async function getPriceCoinsGraphic(url) {
-  let responseG = await fetch(url);
-  let returnApiG = await responseG.json();
-  let selectListQuotationsG = returnApiG.bpi;
-  const queryCoinsListG = Object.keys(selectListQuotationsG).map((key) => {
-    return selectListQuotationsG[key]
-  });
-  let dataG = queryCoinsListG;
-  console.log("datag: ", dataG);
-  return dataG;
+  try {
+    const responseG = await fetch(url);
+    if (!responseG.ok) {
+      throw new Error(`HTTP error! status: ${responseG.status}`);
+    }
+    let returnApiG = await responseG.json();
+    let selectListQuotationsG = returnApiG.bpi;
+    const queryCoinsListG = Object.keys(selectListQuotationsG).map((key) => {
+      return selectListQuotationsG[key]
+    });
+    let dataG = queryCoinsListG;
+    return dataG;
+  } catch (error) {
+    console.error("Error getPriceCoinsGraphic: ", error);
+    throw error;
+  }
 }
 
 
 export default function App() {
   const [coinsList, setCoinsList] = useState([]);
   const [coinsGraphicList, setCoinsGraphicList] = useState([0]);
-  const [days, setDays] = useState(30);
+  const [days, setDays] = useState(180);
   const [updateData, setUpdateData] = useState(true);
   const [price, setPrice] = useState(null);
 
-  function priceQuotation() {
+  const priceQuotation = useCallback(() => {
     setPrice(coinsGraphicList[coinsGraphicList.length - 1]);
-  }
+  }, [coinsGraphicList]);
 
-  function updateDay(number) {
+  const updateDay = useCallback((number) => {
     setDays(number);
     setUpdateData(true);
-  }
+  }, []);
 
   useEffect(() => {
-
-    getListCoins(url(days)).then((data) => {
-      console.log('Dados recebidos pr getlistcoins: ', data);
+    getListCoins(url(180)).then((data) => {
       setCoinsList(data);
     });
 
-    getPriceCoinsGraphic(url(days)).then((dataG) => {
-      console.log('Dados recebidos pr getPriceCoinsGraphic: ', dataG);
+    getPriceCoinsGraphic(url(180)).then((dataG) => {
       setCoinsGraphicList(dataG);
       setPrice(dataG[dataG.length - 1]);
     });
 
-    if (updateData) {
-      priceQuotation();
-      setUpdateData(false);
-    }
+    setUpdateData(false);
 
   }, [updateData]);
 
@@ -97,8 +105,8 @@ export default function App() {
         barStyle="light-content"
       />
       <CurrentPrice lastQuotation={price} />
-      <HistoryGraphic infoDataGraphic={coinsGraphicList} />
-      <QuotationsList filterDay={updateDay} listTransactions={coinsList} />
+      <HistoryGraphic infoDataGraphic={coinsGraphicList.slice(-days)} />
+      <QuotationsList filterDay={updateDay} listTransactions={coinsList.slice(0, days)} />
     </SafeAreaView>
   );
 }
