@@ -7,7 +7,7 @@ export default function HistoryGraphic(props) {
     if (props.infoDataGraphic.length === 0) {
         return null;
     }
-    
+
     return (
         <View>
             <LineChart

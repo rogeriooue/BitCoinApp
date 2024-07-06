@@ -20,8 +20,6 @@ function url(days) {
   date.setDate(date.getDate() - listLastDays);
   const startDate = `${date.getFullYear()}-${addZero(date.getMonth() + 1)}-${addZero(date.getDate())}`;
 
-  // console.log(`https://api.coindesk.com/v1/bpi/historical/close.json?start=${startDate}&end=${endDate}`);
-
   return `https://api.coindesk.com/v1/bpi/historical/close.json?start=${startDate}&end=${endDate}`;
 }
 
