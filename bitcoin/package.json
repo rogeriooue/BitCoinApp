@@ -10,7 +10,8 @@
   },
   "author": "Rogerio Oue",
   "dependencies": {
-    "expo": "^51.0.23",
+    "bitcoin": "file:",
+    "expo": "^51.0.24",
     "expo-status-bar": "~1.12.1",
     "nodemon": "^3.1.0",
     "react": "18.2.0",
