@@ -77,12 +77,14 @@ O estilo do aplicativo é definido no objeto styles.
 
 As seguintes dependências devem ser instaladas no projeto:
 
+```json
 "dependencies": {
   "react": "18.2.0",
   "react-native": "0.74.5",
   "react-native-svg": "^15.8.0",
   "expo": "^48.0.0"
 }
+```
 
 ---
 
