@@ -1,7 +1,6 @@
 # BitcoinApp
 
-React Native Project
-Aplicativo React Native com funcionalidade de cotação gráfica e lista do Bitcoin.
+Aplicativo desenvolvido em React Native com integração com API e exibição dos dados em formato gráfico interativo e lista detalhada.
 
 ## Descrição
 
