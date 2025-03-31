@@ -11,11 +11,11 @@ O BitcoinApp é uma ferramenta para visualizar cotações históricas do Bitcoin
 
 ## Funcionalidades
 
-Exibição do preço atual do Bitcoin: Mostra o valor mais recente do Bitcoin.
-Gráfico histórico de preços: Apresenta um gráfico interativo com os dados históricos.
-Lista de cotações históricas: Exibe uma lista detalhada com os preços do Bitcoin em diferentes datas.
-Filtros de intervalo de tempo: Permite filtrar os dados por intervalos como 7 dias, 15 dias, 30 dias e 90 dias.
-Atualização dinâmica: Atualiza os dados automaticamente com base no intervalo selecionado.
+- **Exibição do preço atual do Bitcoin**: Mostra o valor mais recente do Bitcoin.
+- **Gráfico histórico de preços**: Apresenta um gráfico interativo com os dados históricos.
+- **Lista de cotações históricas**: Exibe uma lista detalhada com os preços do Bitcoin em diferentes datas.
+- **Filtros de intervalo de tempo**: Permite filtrar os dados por intervalos como 7 dias, 15 dias, 30 dias e 90 dias.
+- **Atualização dinâmica**: Atualiza os dados automaticamente com base no intervalo selecionado.
 
 ---
 
@@ -107,8 +107,8 @@ URL: [https://api.coindesk.com/v1/bpi/historical/close.json]
 
 ### Parâmetros
 
-start: Data de início no formato YYYY-MM-DD.
-end: Data de término no formato YYYY-MM-DD.
+- start: Data de início no formato YYYY-MM-DD.
+- end: Data de término no formato YYYY-MM-DD.
 
 Exemplo de URL Gerada:
 [https://api.coindesk.com/v1/bpi/historical/close.json?start=2024-09-01&end=2024-09-30]
