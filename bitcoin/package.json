@@ -23,7 +23,7 @@
   },
   "overrides": {
     "glob": "^10.5.0",
-    "minimatch": "^10.2.1"
+    "minimatch": "^10.2.3"
   },
   "private": true
 }
