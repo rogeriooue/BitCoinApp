@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, Text, StatusBar, SafeAreaView, Platform } from 'react-native';
+import { StyleSheet, Text, StatusBar, Platform } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import CurrentPrice from './src/components/CurrentPrice';
 import HistoryGraphic from './src/components/HistoryGraphic';
@@ -96,16 +97,18 @@ export default function App() {
   }, [updateData]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar
-        backgroundColor="#f50d41"
-        barStyle="light-content"
-      />
-      <CurrentPrice lastQuotation={price} />
-      <HistoryGraphic infoDataGraphic={coinsGraphicList.slice(-days)} />
-      <QuotationsList filterDay={updateDay} listTransactions={coinsList.slice(0, days)} />
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <Text>Open up App.js to start working on your app!</Text>
+        <StatusBar
+          backgroundColor="#f50d41"
+          barStyle="light-content"
+        />
+        <CurrentPrice lastQuotation={price} />
+        <HistoryGraphic infoDataGraphic={coinsGraphicList.slice(-days)} />
+        <QuotationsList filterDay={updateDay} listTransactions={coinsList.slice(0, days)} />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
