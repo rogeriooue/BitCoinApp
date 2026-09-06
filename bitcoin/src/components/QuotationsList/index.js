@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
-import { View, Text, TouchableOpacity, ScrollView, FlatList } from "react-native";
+import React, { Fragment, useCallback } from "react";
+import { View, Text, TouchableOpacity, FlatList } from "react-native";
 
 import styles from "./styles";
 import QuotationsItems from "./QuotationsItems";
@@ -7,6 +7,14 @@ import QuotationsItems from "./QuotationsItems";
 
 export default function QuotationsList(props) {
     const daysQuery = props.filterDay;
+    const renderQuotation = useCallback(({ item }) => (
+        <QuotationsItems valor={item.valor} data={item.data} />
+    ), []);
+
+    const quotationKey = useCallback(
+        (item) => `${item.data}-${item.valor}`,
+        [],
+    );
 
     return (
         <Fragment>
@@ -48,9 +56,8 @@ export default function QuotationsList(props) {
             </View>
             <FlatList
                 data={props.listTransactions}
-                renderItem={({ item }) => {
-                    return <QuotationsItems valor={item.valor} data={item.data} />
-                }}
+                renderItem={renderQuotation}
+                keyExtractor={quotationKey}
             />
         </Fragment>
     );

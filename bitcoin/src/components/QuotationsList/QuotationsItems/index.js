@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { View, Text, Image } from "react-native";
 
 import styles from "./styles";
 
 
-export default function QuotationsItems(props) {
+function QuotationsItems(props) {
     return (
         <View style={styles.mainContent}>
             <View style={styles.contextLeft}>
@@ -17,9 +17,11 @@ export default function QuotationsItems(props) {
                 </View>
             </View>
             <View style={styles.contextRight}>
-                <Text style={styles.price}>{props.valor}</Text>
+                <Text style={styles.price}>{Number(props.valor).toFixed(2)}</Text>
             </View>
         </View>
     );
 }
+
+export default memo(QuotationsItems);
 

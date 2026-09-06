@@ -14,7 +14,7 @@ O BitcoinApp é uma ferramenta para visualizar cotações históricas do Bitcoin
 - **Gráfico histórico de preços**: Apresenta um gráfico interativo com os dados históricos.
 - **Lista de cotações históricas**: Exibe uma lista detalhada com os preços do Bitcoin em diferentes datas.
 - **Filtros de intervalo de tempo**: Permite filtrar os dados por intervalos como 7 dias, 15 dias, 30 dias e 90 dias.
-- **Atualização dinâmica**: Atualiza os dados automaticamente com base no intervalo selecionado.
+- **Filtros de intervalo de tempo**: Altera localmente o período exibido sem fazer uma nova consulta à API.
 
 ---
 
@@ -26,7 +26,9 @@ A função principal do aplicativo gerencia o estado e renderiza os componentes 
 
 ### Fluxo do Aplicativo
 
-- O aplicativo inicia carregando os dados históricos do Bitcoin a partir da API da CoinDesk.
+- O aplicativo inicia carregando 180 dias de dados históricos do Bitcoin a partir da API da CoinGecko.
+- A resposta da API é convertida a partir dos timestamps Unix para datas no formato DD/MM/AAAA.
+- Os filtros de 7, 15, 30, 90 e 180 dias são aplicados localmente sobre os dados já carregados.
 - Os dados são processados e armazenados no estado do aplicativo.
 - O preço atual é exibido no componente CurrentPrice.
 - O gráfico histórico é renderizado no componente HistoryGraphic.
@@ -49,21 +51,15 @@ Recebe as transações como prop (listTransactions) e uma função para atualiza
 
 ### Principais Funções
 
-1. **addZero(number)**:
-Adiciona um zero à esquerda para números menores que 10.
-Usada para formatar datas.
-
-2. **url(days)**:
+1. **url(days)**:
 Gera a URL para buscar os dados históricos de preços do Bitcoin.
 Baseada no número de dias fornecido.
 
-3. **getListCoins(url)**:
-Faz uma requisição à API para buscar os dados históricos de preços.
-Retorna uma lista formatada com as datas e valores.
+2. **formatDate(timestamp)**:
+Converte um timestamp Unix em milissegundos para uma data no formato brasileiro DD/MM/AAAA.
 
-4. **getPriceCoinsGraphic(url)**:
-Faz uma requisição à API para buscar os dados históricos de preços.
-Retorna apenas os valores dos preços para uso no gráfico.
+3. **getMarketChart(apiUrl)**:
+Faz uma única requisição aos dados de mercado, extrai o campo `prices` e separa os dados para o gráfico e para a lista de cotações.
 
 ---
 
@@ -75,16 +71,7 @@ O estilo do aplicativo é definido no objeto styles.
 
 ## Dependências
 
-As seguintes dependências devem ser instaladas no projeto:
-
-```json
-"dependencies": {
-  "react": "^18.3.1",
-  "react-native": "^0.76.7",
-  "react-native-svg": "^15.8.0",
-  "expo": "^52.0.41"
-}
-```
+As versões das dependências devem ser verificadas no arquivo package.json.
 
 ---
 
@@ -102,14 +89,33 @@ npm start
 
 ## API Utilizada
 
-### CoinDesk API
+### CoinGecko Market Chart API
 
-URL: [https://api.coindesk.com/v1/bpi/historical/close.json]
+URL base:
+[https://api.coingecko.com/api/v3/coins/bitcoin/market_chart]
 
 ### Parâmetros
 
-- start: Data de início no formato YYYY-MM-DD.
-- end: Data de término no formato YYYY-MM-DD.
+- `vs_currency=usd`: Define o dólar americano como moeda de conversão.
+- `days=180`: Solicita inicialmente 180 dias de histórico.
+- `interval=daily`: Solicita dados com intervalo diário.
 
-Exemplo de URL Gerada:
-[https://api.coindesk.com/v1/bpi/historical/close.json?start=2024-09-01&end=2024-09-30]
+Exemplo de URL:
+[https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=180&interval=daily]
+
+### Formato da resposta
+
+A API retorna, entre outros campos, o campo `prices`. Cada item possui o timestamp Unix em milissegundos e o preço:
+
+```json
+{
+  "prices": [
+    [1787443200000, 77081.0229900092],
+    [1787529600000, 77712.3200924702]
+  ],
+  "market_caps": [],
+  "total_volumes": []
+}
+```
+
+O aplicativo utiliza somente `prices`. O primeiro valor de cada item é convertido para data com `new Date(timestamp)` e formatado com `toLocaleDateString('pt-BR')`. O segundo valor é usado como preço no gráfico e na lista. Os campos `market_caps` e `total_volumes` são ignorados.
