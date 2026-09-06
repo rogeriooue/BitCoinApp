@@ -92,7 +92,7 @@ npm start
 ### CoinGecko Market Chart API
 
 URL base:
-[https://api.coingecko.com/api/v3/coins/bitcoin/market_chart]
+[https://api.coingecko.com/api/v3]
 
 ### Parâmetros
 
